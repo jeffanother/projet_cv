@@ -72,6 +72,29 @@ def indeed_dataframe_Postulants(typeDePoste, codePostal, rayonPostulant, fraiche
     Récupère les informations sur le candidat (dernier poste, lieu de résidence, URL du CV)
     Renvoi une dataframe pandas contenant les informations
     """
+    # convertit l'abréviation du mois (ex : "févr" en "février")
+    def conversion_mois(mois_a_convertir):
+        mois_a_convertir_tab = mois_a_convertir.split(" ")
+        if mois_a_convertir_tab[1] == "janv":
+            mois_a_convertir_tab[1] = "janvier"
+        if mois_a_convertir_tab[1] == "févr":
+            mois_a_convertir_tab[1] = "février"
+        if mois_a_convertir_tab[1] == "avr":
+            mois_a_convertir_tab[1] = "avril"
+        if mois_a_convertir_tab[1] == "juil":
+            mois_a_convertir_tab[1] = "juillet"
+        if mois_a_convertir_tab[1] == "sept":
+            mois_a_convertir_tab[1] = "septembre"
+        if mois_a_convertir_tab[1] == "oct":
+            mois_a_convertir_tab[1] = "octobre"
+        if mois_a_convertir_tab[1] == "nov":
+            mois_a_convertir_tab[1] = "novembre"
+        if mois_a_convertir_tab[1] == "déc":
+            mois_a_convertir_tab[1] = "décembre"
+        mois_convertis = " ".join(mois_a_convertir_tab)
+        return mois_convertis
+
+
     poste = []
     lieuResidence = []
     urlCV = []
@@ -118,6 +141,7 @@ def indeed_dataframe_Postulants(typeDePoste, codePostal, rayonPostulant, fraiche
             majTemp = offre.select("div.times span.last_updated")[0].text.split(" : ")[1].replace(".", "")
             majTemp = (majTemp + " " + annee) if len(majTemp.split(" ")) == 2 else majTemp
             maj.append(majTemp)
+            maj = conversion_mois(maj)
 
         # Récupère l'url de la page HTML suivante
         url = indeed_generation_url_page_suivante(soup)
@@ -126,7 +150,7 @@ def indeed_dataframe_Postulants(typeDePoste, codePostal, rayonPostulant, fraiche
 
     if itsOK is True:
         taille_tableau = len(poste)
-        tab_typeDePoste = [typeDePoste for x in range(taille_tableau)]
+        tab_typeDePoste = [typeDePoste.capitalize() for x in range(taille_tableau)]
         tab_site = ["Indeed" for x in range(taille_tableau)]
         dataPartielle = pd.DataFrame({'Site':tab_site,
                                       'Type de poste recherché':tab_typeDePoste,

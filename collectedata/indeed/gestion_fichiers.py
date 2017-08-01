@@ -43,6 +43,7 @@ def ecriture_fichier_cvs(self):
     try:
         writer = pd.ExcelWriter(self.nom_fichier_ecriture_resultats_recherche_cv)
         self.df.to_excel(writer, nomFeuilleExcel, index=False)
+        writer.save()
         writer.close()
     except:
         ## Essai pour écrire avec un autre nom si le fichier est déjà ouvert

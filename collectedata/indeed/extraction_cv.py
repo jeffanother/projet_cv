@@ -6,7 +6,7 @@ import re
 from random import randint
 from time import sleep
 import pandas as pd
-#import os
+import os
 
 from collectedata.indeed.recherche_cv import indeed_dataframe_Postulants
 
@@ -15,40 +15,40 @@ from collectedata.indeed.recherche_cv import indeed_dataframe_Postulants
 
 #----------------------------  Traitement de la partie CV  ----------------------------#
 
-#def telechargement_page_html_cv(url):
-#    """
-#    Télécharge la page HTML contenant le CV
-#    """
-#    html = requests.get(url, timeout=10).text
-#    if "Ce CV n'a pas pu être trouvé" in html:
-##         print("\nNous sommes Blackliste\n")
-#        return False
-#    else:
-#        return html
-
 def telechargement_page_html_cv(url):
     """
     Télécharge la page HTML contenant le CV
     """
-    ## Le code en commentaire est un 1er jet pour sauvegarder et versionner les pages HTML téléchargées
-#    # Vérifie si le CV à déjà été téléchargé
+    html = requests.get(url, timeout=10).text
+    if "Ce CV n'a pas pu être trouvé" in html:
+#         print("\nNous sommes Blackliste\n")
+        return False
+    else:
+        return html
+
+#def telechargement_page_html_cv_2(url):
+#    """
+#    Télécharge la page HTML contenant le CV
+#    """
+#    # Le code en commentaire est un 1er jet pour sauvegarder et versionner les pages HTML téléchargées
 #    repertoire_racine_projet = os.getcwd()
 #    datastage_indeed = os.path.join(repertoire_racine_projet, "datastage", "indeed")
 #    os.chdir(datastage_indeed)
 #    nom_fichier = url[25:-5] + ".html"
-#    if not nom_fichier os.path.isfile(nom_fichier):
+#    # Vérifie si le CV à déjà été téléchargé
+#    if not os.path.isfile(nom_fichier):
 #        pass
-        
-    html = requests.get(url, timeout=10).text
-    
-#    with codecs.open(nom_fichier, 'w', encoding='utf-8') as fichier:
-#        pass
-        
-#    os.chdir(repertoire_racine_projet)
-    if "Ce CV n'a pas pu être trouvé" in html:
-        return False
-    else:
-        return html.encode("utf-8")
+#        
+#    html = requests.get(url, timeout=10).text
+#    
+##    with codecs.open(nom_fichier, 'w', encoding='utf-8') as fichier:
+##        pass
+#        
+##    os.chdir(repertoire_racine_projet)
+#    if "Ce CV n'a pas pu être trouvé" in html:
+#        return False
+#    else:
+#        return html.encode("utf-8")
 
 
 def indeed_occurence_mots_cles_cv(motsCles, textCVLower):
@@ -125,7 +125,7 @@ def scraping_cv(self):
                     # Boucle tournant sur les différents type de postes mis sur la ligne
                     for typeDePoste in parametresLignes[1].split(','):
                         typeDePoste = typeDePoste.strip(' ').lower()
-                        print(typeDePoste)
+                        print(typeDePoste.upper())
                         indeedDF = indeed_dataframe_Postulants(typeDePoste, codePostal, rayon, fraicheurCV)
                         
                         if indeedDF is False:
@@ -134,10 +134,7 @@ def scraping_cv(self):
                             break
                         
                         df_poste = indeed_occurence_mots_cles_cvs(self, indeedDF, motsCles)
-                        indeed_df = indeed_df.append(
-                                df_poste,
-                                ignore_index=True
-                                )
+                        indeed_df = indeed_df.append(df_poste, ignore_index=True)
         if not indeed_df.empty:
             self.scraping_cv_done = True
         else:

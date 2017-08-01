@@ -68,8 +68,7 @@ class ObjetIndeed:
             if self.scraping_cv_done is False:
                 df_indeed = scraping_cv(self)
                 self.df_indeed = df_indeed
-                self.df = self.df.append(df_indeed,
-                                         ignore_index=True)
+                self.df = self.df.append(df_indeed, ignore_index=True)
 
     def EcritureFichierCV(self):
         """
@@ -83,11 +82,11 @@ class ObjetIndeed:
 if __name__ is "__main__":
     pass
     
-    indeed = ObjetIndeed()
-    indeed.activer_mode_test()
-    print()
-#    indeed.scraping_cvs()
-#    indeed.ecriture_fichier_cvs()
+#    indeed = ObjetIndeed()
+#    indeed.activer_mode_test()
+#    print()
+##    indeed.scraping_cvs()
+##    indeed.ecriture_fichier_cvs()
     
     
     
